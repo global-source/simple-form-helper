@@ -1,10 +1,8 @@
 <?php
-
-if (!class_exists('after_listen_form_helper')) {
     /**
-     * Class after_listen_form_helper
+     * Class form library
      */
-    class after_listen_form_helper
+    class form
     {
         /**
          * @var
@@ -123,4 +121,3 @@ if (!class_exists('after_listen_form_helper')) {
             $this->form = false;
         }
     }
-}
