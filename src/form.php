@@ -4,7 +4,7 @@
      */
     class form
     {
-        /**
+         /**
          * @var
          */
         protected $form;
@@ -35,6 +35,9 @@
             }
         }
 
+        /**
+         * @return bool
+         */
         public function isToJSON()
         {
             return (bool)$this->toJSON;
@@ -81,13 +84,13 @@
         {
             switch ($type) {
                 case 'string':
-                    $value = filter_var($value, FILTER_SANITIZE_STRING);
+                    $value = self::toString($value);
                     break;
                 case 'email':
-                    $value = filter_var($value, FILTER_SANITIZE_EMAIL);
+                    $value = self::toMail($value);
                     break;
                 default:
-                    $value = filter_var($value, FILTER_SANITIZE_STRING);
+                    $value = self::toString($value);
                     break;
             }
         }
@@ -101,13 +104,13 @@
         {
             switch ($type) {
                 case 'string':
-                    $response = filter_var($value, FILTER_SANITIZE_STRING);
+                    $response = self::isString($value);
                     break;
                 case 'email':
-                    $response = filter_var($value, FILTER_VALIDATE_EMAIL);
+                    $response = self::isMail($value);
                     break;
                 default:
-                    $response = filter_var($value, FILTER_SANITIZE_STRING);
+                    $response = self::isString($value);
                     break;
             }
             return $response;
@@ -119,5 +122,69 @@
         public function reset()
         {
             $this->form = false;
+        }
+
+        /**
+         * To convert into String.
+         *
+         * @param $string
+         * @return bool|mixed
+         */
+        public static function toString($string)
+        {
+            // Convert string value.
+            $string = strval($string);
+            // If not valid, then return false.
+            if (!$string) return false;
+            // Return with sanitized string.
+            return filter_var($string, FILTER_SANITIZE_STRING);
+        }
+
+        /**
+         * To return, this is string or not.
+         *
+         * @param $email
+         * @return bool
+         */
+        public static function isString($email)
+        {
+            // Convert into string value.
+            $email = strval($email);
+            // Return false, if not valid.
+            if (!$email) return false;
+            // Return true, if valid.
+            return true;
+        }
+
+        /**
+         * Convert into mail.
+         *
+         * @param $email
+         * @return bool|mixed
+         */
+        public static function toMail($email)
+        {
+            // Convert to string.
+            $email = strval($email);
+            // If not a valid string, then return false.
+            if (!$email) return false;
+            // Return with valid email format.
+            return filter_var($email, FILTER_SANITIZE_EMAIL);
+        }
+
+        /**
+         * To check this is mail or not.
+         *
+         * @param $email
+         * @return bool|mixed
+         */
+        public static function isMail($email)
+        {
+            // Convert into string.
+            $email = strval($email);
+            // If not a valid string, then return false.
+            if (!$email) return false;
+            // Return with validated email.
+            return filter_var($email, FILTER_VALIDATE_EMAIL);
         }
     }
